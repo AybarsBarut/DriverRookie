@@ -1,15 +1,13 @@
-# Dili belirleme: Eger $Lang degiskeni onceden 'en' olarak tanimlanmissa Ingilizce kullan. 
-# Ornegin: $Lang='en'; irm <link> | iex
-$scriptLang = "tr"
-if ($Lang -eq "en" -or $Lang -eq "EN") {
-    $scriptLang = "en"
-}
-
 function Get-DriverUpdates {
     [CmdletBinding()]
     param (
         [string]$Language = "tr"
     )
+
+    # Check if a global Lang variable was set before running via iex
+    if ($global:Lang -eq "en" -or $global:Lang -eq "EN" -or $Lang -eq "en" -or $Lang -eq "EN" -or $env:Lang -eq "en") {
+        $Language = "en"
+    }
 
     $dict = @{}
 
@@ -120,10 +118,10 @@ function Get-DriverUpdates {
 
     Write-Host $dict["Scanning"] -ForegroundColor Green
     $drivers = Get-CimInstance Win32_PnPSignedDriver | Where-Object { 
-        $_.DeviceName -ne $null -and
-        $_.Manufacturer -ne $null -and
+        $null -ne $_.DeviceName -and
+        $null -ne $_.Manufacturer -and
         $_.Manufacturer -notmatch "Microsoft" -and 
-        $_.DriverVersion -ne $null 
+        $null -ne $_.DriverVersion 
     } | Sort-Object DeviceClass
 
     $outdatedDrivers = @()
@@ -166,4 +164,4 @@ function Get-DriverUpdates {
     $outdatedDrivers | Format-Table -AutoSize
 }
 
-Get-DriverUpdates -Language $scriptLang
+Get-DriverUpdates
