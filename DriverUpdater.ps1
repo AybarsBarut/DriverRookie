@@ -108,9 +108,25 @@ function Get-DriverUpdates {
     "" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
     $dict["QuickLinks"] | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
     "_______________________________________________" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
-    "NVIDIA : https://www.nvidia.com/Download/index.aspx" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
-    "AMD    : https://www.amd.com/en/support" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
-    "Intel  : https://www.intel.com/content/www/us/en/download-center/home.html" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
+    
+    $hasNvidia = $false
+    $hasAmd = $false
+    $hasIntel = $false
+
+    foreach ($gpu in $gpus) {
+        if ($gpu.Name -match "(?i)NVIDIA") { $hasNvidia = $true }
+        if ($gpu.Name -match "(?i)AMD|Radeon") { $hasAmd = $true }
+        if ($gpu.Name -match "(?i)Intel") { $hasIntel = $true }
+    }
+
+    if ($hasNvidia) { "NVIDIA : https://www.nvidia.com/Download/index.aspx" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append }
+    if ($hasAmd) { "AMD    : https://www.amd.com/en/support" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append }
+    if ($hasIntel) { "Intel  : https://www.intel.com/content/www/us/en/download-center/home.html" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append }
+    if (-not $hasNvidia -and -not $hasAmd -and -not $hasIntel) {
+        "NVIDIA : https://www.nvidia.com/Download/index.aspx" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
+        "AMD    : https://www.amd.com/en/support" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
+        "Intel  : https://www.intel.com/content/www/us/en/download-center/home.html" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
+    }
     "" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
     
     $dict["CustomDrivers"] | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
@@ -124,7 +140,9 @@ function Get-DriverUpdates {
         "PCI Express Root Complex", "Programmable interrupt controller", "Motherboard resources",
         "Sleep Button", "Power Button", "High precision event timer", "System timer", "Processor", "Disk drive",
         "Charge Arbitration Driver", "Plug-in", "Extensible Framework", "SMBus", "Management Engine", "Intel(R) Host Bridge",
-        "LPC Controller", "Root Port", "SRAM", "SPI (flash)", "Host Controller"
+        "LPC Controller", "Root Port", "SRAM", "SPI (flash)", "Host Controller", "Keyboard", "Touch pad",
+        "Steam Streaming", "xHCI Compliant", "USB Composite", "Root Hub", "Serial IO", "Platform Monitoring Technology",
+        "Software Device Enumerator", "Basic Display Driver", "Meta"
     )
 
     $drivers = Get-CimInstance Win32_PnPSignedDriver | Where-Object { 
