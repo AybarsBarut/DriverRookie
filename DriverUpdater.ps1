@@ -172,8 +172,8 @@ function Get-DriverUpdates {
             $driverDateFormatted = $driver.DriverDate.ToString("yyyy-MM-dd")
         }
 
-        $hwSearchString = [uri]::EscapeDataString($driver.DeviceName)
-        $googleSearchUrl = "https://www.google.com/search?q=$hwSearchString+driver+download"
+        $hwSearchString = [uri]::EscapeDataString("$($driver.DeviceName) driver $($driver.DriverVersion)")
+        $googleSearchUrl = "https://www.google.com/search?q=$hwSearchString"
 
         $row = New-Object PSObject
         $row | Add-Member -MemberType NoteProperty -Name $dict["Col_Device"] -Value $driver.DeviceName
