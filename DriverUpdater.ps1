@@ -117,11 +117,33 @@ function Get-DriverUpdates {
     "_______________________________________________" | Out-File -FilePath $updateReportPath -Encoding utf8 -Append
 
     Write-Host $dict["Scanning"] -ForegroundColor Green
+    
+    # İstenmeyen donanim adlari veya kelimeleri (kara liste)
+    $blacklist = @(
+        "Virtual", "Standard", "Generic", "ACPI", "Bluetooth", "Event Filter", "HID-compliant", "USB Input Device",
+        "PCI Express Root Complex", "Programmable interrupt controller", "Motherboard resources",
+        "Sleep Button", "Power Button", "High precision event timer", "System timer", "Processor", "Disk drive",
+        "Charge Arbitration Driver", "Plug-in", "Extensible Framework", "SMBus", "Management Engine", "Intel(R) Host Bridge",
+        "LPC Controller", "Root Port", "SRAM", "SPI (flash)", "Host Controller"
+    )
+
     $drivers = Get-CimInstance Win32_PnPSignedDriver | Where-Object { 
         $null -ne $_.DeviceName -and
         $null -ne $_.Manufacturer -and
         $_.Manufacturer -notmatch "Microsoft" -and 
+        $_.Manufacturer -notmatch "\(Standard" -and 
         $null -ne $_.DriverVersion 
+    } | Where-Object {
+        $name = $_.DeviceName
+        # Eğer cihaz adı kara listedeki kelimelerden herhangi birini içeriyorsa ele (filtrele)
+        $keep = $true
+        foreach ($badWord in $blacklist) {
+            if ($name -match "(?i)$badWord") {
+                $keep = $false
+                break
+            }
+        }
+        $keep
     } | Sort-Object DeviceClass
 
     $outdatedDrivers = @()
