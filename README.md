@@ -1,21 +1,35 @@
 # DriverRookie
 
-a simple powershell script to check your system specs and installed custom drivers. it filters out the microsoft generic ones so you only see what matters.
+![type](https://img.shields.io/badge/type-Windows%20utility-blue) ![tech](https://img.shields.io/badge/tech-PowerShell-black) ![status](https://img.shields.io/badge/status-active-green)
 
-it also drops a report on your desktop with google search links to download the drivers if they're outdated, plus direct links for nvidia, amd and intel.
+**DriverRookie** is a portable Windows driver version checker that helps identify installed non-generic drivers and generate practical update/search links.
 
-## how to use
+Designed for Windows users, PC technicians, gamers, IT support teams, and anyone checking driver state before troubleshooting performance or hardware issues.
 
-just open powershell as admin and run this:
+## Features
 
-`irm https://raw.githubusercontent.com/AybarsBarut/DriverRookie/main/DriverUpdater.ps1 | iex`
+- Filter out generic Microsoft drivers to focus on useful vendor-specific driver entries.
+- Generate a desktop report for quick review.
+- Include search links for driver updates and vendor resources.
+- Run from PowerShell without a heavyweight installer.
+- Support quick local testing from the repository files.
 
-## english version
+## Installation
 
-if you want the english output, set the lang variable before running:
+No installation is required. Review the PowerShell script before running it, especially when using remote execution commands.
 
-`$Lang='en'; irm https://raw.githubusercontent.com/AybarsBarut/DriverRookie/main/DriverUpdater.ps1 | iex`
+## Usage
 
-## local testing
+Run PowerShell as administrator, then execute: `irm https://raw.githubusercontent.com/AybarsBarut/DriverRookie/main/DriverUpdater.ps1 | iex`
 
-there's a starter.bat file if you download the repo and want to test it locally without execution policy crying about it.
+## SEO Keywords
+
+Windows driver checker, PowerShell driver version checker, driver update report, portable driver utility, PC driver diagnostics, Windows hardware support tool
+
+## GitHub Topics
+
+`powershell`, `windows`, `drivers`, `driver-checker`, `system-tools`, `portable-app`
+
+## Repository
+
+[View on GitHub](https://github.com/AybarsBarut/DriverRookie)
